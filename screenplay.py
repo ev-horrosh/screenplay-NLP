@@ -2,6 +2,7 @@ from collections import OrderedDict
 
 
 class Screenplay():
+    
     INT_EXT = ['INT.', 'EXT.', 'INT/EXT.', 'EXT/INT.']
     TOD = ['AFTERNOON', 'CONTINUOUS', 'DAWN', 'DAY', 'DUSK',
            'EVENING', 'LATER', 'MORNING', 'NIGHT', 'NOON', 'SAME']
