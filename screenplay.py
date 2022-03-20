@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 
 class Screenplay():
-    
+
     INT_EXT = ['INT.', 'EXT.', 'INT/EXT.', 'EXT/INT.']
     TOD = ['AFTERNOON', 'CONTINUOUS', 'DAWN', 'DAY', 'DUSK',
            'EVENING', 'LATER', 'MORNING', 'NIGHT', 'NOON', 'SAME']
@@ -11,7 +11,7 @@ class Screenplay():
                    'SMASH CUT TO:', 'TIME CUT:', 'WIPE TO:', 'CROSSFADE:', 'OVER BLACK:', 'CUT TO BLACK',
                    'FADE TO:BLACK', 'FLASH CUT:', 'LAP DISSOLVE:', 'MATCH DISSOLVE TO:', 'SUPER:', 'IRIS OUT:']
     SHOTS = ['AERIAL SHOT', 'ANGLE ON',  'CLOSE ON', 'CLOSER ANGLE', 'CONTINUOUS',
-             'CONTRAZOOM', 'CRAWL',  'ESTABLISHING SHOT',
+             'CONTRAZOOM', 'CRAWL',  'ESTABLISHING SHOT', 'DAYS LATER'
              'EXTREMELY LONG SHOT (XLS):', 'FAVOR ON',
              'FLASHBACK:', 'FREEZE FRAME:', 'INSERT',
              'INTO FRAME:', 'INTO VIEW:', 'MOS', 'O.C. / O.S.',
@@ -30,6 +30,17 @@ class Screenplay():
                     scene = ' '.join([x for x in i.split()])
                     self.scenes.append(scene)
         return self.scenes
+
+    def parse(self):
+        scenes = {}
+
+        for i, s in enumerate(self.get_scenes()):
+            scenes.update({
+                i: {
+                    f'int/ext': [l for l in s.split()][0],
+                    'location': ' '.join([l for l in s.split()][1:-2]),
+                    'tod': [l for l in s.split()][-1]
+                }})
 
 
 if __name__ == '__main__':
