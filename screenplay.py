@@ -20,11 +20,11 @@ class Screenplay():
              'TIGHT ON', 'TIME CUT', 'V.O.', 'ZOOM:']
 
     def __init__(self, text: list) -> dict:
-        self.text = text
+        self.text = [l.strip() for l in text if not l.isspace()]
 
     def get_scenes(self):
         self.scenes = []
-        for i in [e.strip() for e in self.text if e.isupper() and e not in self.TRANSITIONS]:
+        for i in [e for e in self.text if e.isupper() and e not in self.TRANSITIONS]:
             for item in i.split():
                 if item in self.INT_EXT:
                     scene = ' '.join([x for x in i.split()])
@@ -34,10 +34,10 @@ class Screenplay():
     def parse(self):
         scenes = {}
 
-        for i, s in enumerate(self.get_scenes()):
+        for i, s in enumerate(self.get_scenes(),start=1):
             scenes.update({
                 i: {
-                    f'int/ext': [l for l in s.split()][0],
+                    f'int_ext': [l for l in s.split()][0],
                     'location': ' '.join([l for l in s.split()][1:-2]),
                     'tod': [l for l in s.split()][-1]
                 }})
