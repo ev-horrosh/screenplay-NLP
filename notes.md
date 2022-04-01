@@ -38,6 +38,12 @@ not perfect since every screenplay wruiter writes in uniquely
 
 taking into account this we definately gonna have to do some clean up
 that goes to show that every nlp problems will present it s own challenges
+
+so the idea is to have a function tha returns a list of scene headers.
+having that will allow us to extract their indecies in the text.
+those indecies will allow us to grab the info  
+
+
 ------------------
 optimizations
 
@@ -45,5 +51,6 @@ how to load and store the data in class
 call stats like info() in pandas
 
 breaking files into smaller py files
+is breaking apart py files prevent from using private functions
 
-
+add their custom words

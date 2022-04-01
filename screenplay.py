@@ -19,10 +19,10 @@ class Screenplay():
              'REVERSE ANGLE',  'SPLIT SCREEN SHOT:', 'STOCK SHOT:',
              'TIGHT ON', 'TIME CUT', 'V.O.', 'ZOOM:']
 
-    def __init__(self, text: list) -> dict:
+    def __init__(self, text: list):
         self.text = [l.strip() for l in text if not l.isspace()]
 
-    def get_scenes(self):
+    def get_scenes(self):  # list of scene
         self.scenes = []
         for i in [e for e in self.text if e.isupper() and e not in self.TRANSITIONS]:
             for item in i.split():
@@ -31,16 +31,19 @@ class Screenplay():
                     self.scenes.append(scene)
         return self.scenes
 
-    def parse(self):
-        scenes = {}
+    def get_scene_index(self):  # list of scene ind
+        return [i for i, l in enumerate(self.text) if l in self.get_scenes()]
 
-        for i, s in enumerate(self.get_scenes(),start=1):
-            scenes.update({
-                i: {
-                    f'int_ext': [l for l in s.split()][0],
-                    'location': ' '.join([l for l in s.split()][1:-2]),
-                    'tod': [l for l in s.split()][-1]
-                }})
+    # def parse(self):
+    #     scenes = {}
+
+    #     for i, s in enumerate(self.get_scenes(), start=1):
+    #         scenes.update({
+    #             i: {
+    #                 f'int_ext': [l for l in s.split()][0],
+    #                 'location': ' '.join([l for l in s.split()][1:-2]),
+    #                 'tod': [l for l in s.split()][-1]
+    #             }})
 
 
 if __name__ == '__main__':
@@ -48,4 +51,5 @@ if __name__ == '__main__':
         text = f.readlines()
 
         sc = Screenplay(text)
-        print(len(sc.get_scenes()))
+        # print(sc.parse())
+        # print(sc.get_scene_index())
