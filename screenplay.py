@@ -28,7 +28,7 @@ class Screenplay:
                                                       'TIGHT ON', 'TIME CUT', 'V.O.', 'ZOOM:'])
 
     def __post_init__(self):
-        self.text =text
+        self.text = text
 
     def locations(self) -> list[str]:
         locations = []
@@ -105,9 +105,12 @@ class Screenplay:
                 return strip_dash(temp)
         result = strip_dash(temp)
         return result
-    
-    def extract_dialog(self,text):
-        return [i.strip() for i in text if not i[15:25].strip()!='' and i[69:79]=='' and i!='\n']
+
+    def extract_dialog(self, text):
+        return [i.strip() for i in text if not i[15:25].strip() != '' and i[69:79] == '' and i != '\n']
+
+    def extract_action(self, text):
+        return [i.strip() for i in text if i[:16].strip() != '' and i.strip() not in self.locations()]
 
     @classmethod
     def add_transition(cls, transition):
@@ -127,8 +130,8 @@ class Screenplay:
                     'location': self.locsplit(s[1]['text'][0]),
                     'tod': self.scene_att_extraction(s[1]['text'], self.TOD)[0],
                     'transitions': self.scene_att_extraction(s[1]['text'], self.TRANSITIONS),
-                    # 'action':[]
-                    'dialog':self.extract_dialog(s[1]['text']),
+                    'action': self.extract_action(s[1]['text']),
+                    'dialog': self.extract_dialog(s[1]['text']),
 
                 }})
 
@@ -148,7 +151,7 @@ if __name__ == '__main__':
     # pprint(sc.characters())
     # pprint(sc.transitions())
     pprint(sc.load())
-    
+
     # pprint([c for c in sc.scenes()[11]['text']])
     # print([i for i in sc.scenes()[11]['text'] if i.isupper()
     #        and i not in sc.locations()
