@@ -30,6 +30,14 @@ class Screenplay:
     def __post_init__(self):
         self.text = text
 
+    @classmethod
+    def add_transition(cls, transition):
+        cls.TRANSITIONS.append(transition)
+
+    @classmethod
+    def add_shot(cls, shot):
+        cls.SHOTS.append(shot)
+
     def locations(self) -> list[str]:
         locations = []
         for i in [e.strip() for e in self.text if e.isupper() and e not in self.TRANSITIONS]:
@@ -39,11 +47,10 @@ class Screenplay:
                     locations.append(scene)
         return locations
 
-    # @property
     def scene_index(self):
         return [i for i, l in enumerate(self.text) if l.strip() in self.locations()]
 
-    def scenes(self):  # use Ordered dict
+    def scenes(self):
         scene_index = self.scene_index()
         result = {}
         for i, _ in enumerate(scene_index, 1):
@@ -54,38 +61,11 @@ class Screenplay:
                     {i: {'text': self.text[scene_index[i-1]:scene_index[i]]}})
         return result
 
-    # def delete_phrases(self,text, phrases):
-    #     if len(phrases) == 1:
-    #         result = [t for t in text if phrases[0] not in t]
-    #         return result
-    #     else:
-    #         for idx, phrase in enumerate(phrases):
-    #             result = [t for t in text if phrase not in t]
-    #             return self.delete_phrases(result, phrases[idx+1:])
-
-    def characters(self):
-        # scene_index=self.scene_index()
-        result = {}
-        for i, v in enumerate(self.scenes().items(), start=1):
-            # print({i:{'characters':[c for c in v[1]['text'] if c.isupper()]}})
-            result.update(
-                {i: {'characters': list(set(c for c in v[1]['text'] if c.isupper()
-                                            and c not in self.locations()
-                                            and c not in self.TRANSITIONS
-                                            and c not in self.SHOTS
-                                            and c not in self.INT_EXT
-                                            and ',' not in c
-                                            and '!' not in c
-                                            and not c.startswith('(')
-                                            and len(c) < 25))}})
-        return result
-
     def transitions(self):
         result = {}
         for i, v in enumerate(self.scenes().items(), start=1):
             result.update(
                 {i: {'transitions': [t for t in v[1]['text'] if t in self.TRANSITIONS]}})
-
         return result
 
     def scene_att_extraction(self, text, scene_attribute):
@@ -106,19 +86,31 @@ class Screenplay:
         result = strip_dash(temp)
         return result
 
-    def extract_dialog(self, text):
+    def extract_dialogs(self, text):
         return [i.strip() for i in text if not i[15:25].strip() != '' and i[69:79] == '' and i != '\n']
+
+    def character_dialog(self, dialog):
+        result = {}
+        dialog_index = []
+        for i, d in enumerate([dialog]):
+            [dialog_index.append(index)
+             for index, t in enumerate(d) if t.isupper()]
+
+        for i, t in enumerate(dialog_index):
+            character = dialog[dialog_index[i]]
+            try:
+                if dialog_index[i] == dialog_index[-1]:
+                    result[character] = result.get(
+                        character, [])+dialog[dialog_index[i]+1:]
+                else:
+                    result[character] = result.get(
+                        character, [])+dialog[dialog_index[i]+1:dialog_index[i+1]]
+            except:
+                result[character] = result.get(character, [])
+        return result
 
     def extract_action(self, text):
         return [i.strip() for i in text if i[:16].strip() != '' and i.strip() not in self.locations()]
-
-    @classmethod
-    def add_transition(cls, transition):
-        cls.TRANSITIONS.append(transition)
-
-    @classmethod
-    def add_shot(cls, shot):
-        cls.SHOTS.append(shot)
 
     def load(self):
         result = {}
@@ -131,7 +123,7 @@ class Screenplay:
                     'tod': self.scene_att_extraction(s[1]['text'], self.TOD)[0],
                     'transitions': self.scene_att_extraction(s[1]['text'], self.TRANSITIONS),
                     'action': self.extract_action(s[1]['text']),
-                    'dialog': self.extract_dialog(s[1]['text']),
+                    'dialog': self.character_dialog(self.extract_dialogs(s[1]['text'])),
 
                 }})
 
@@ -142,20 +134,5 @@ if __name__ == '__main__':
     with open('text.txt', 'r') as f:
         text = f.readlines()
 
-    sc = Screenplay(text[:1000])
-    # print(sc.TRANSITIONS)
-    # pprint(sc.text)
-    # print(sc.scene_index())
-    # print(sc.locations())
-    # print(sc.scenes())
-    # pprint(sc.characters())
-    # pprint(sc.transitions())
+    sc = Screenplay(text)
     pprint(sc.load())
-
-    # pprint([c for c in sc.scenes()[11]['text']])
-    # print([i for i in sc.scenes()[11]['text'] if i.isupper()
-    #        and i not in sc.locations()
-    #        and i not in sc.TRANSITIONS
-    #        and i not in sc.SHOTS
-    #        and ',' not in i
-    #        and len(i)<25])
