@@ -1,12 +1,18 @@
-Joker - Sapolsky.pdf
 joker_new_final.pdf
 Joker.pdf
-
+joker.ipynb
+extraction.ipynb
+eda.ipynb
+test.py
+web.py
+.env
+venv
+notes.md
+eda.ipynb
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-
 # C extensions
 *.so
 

@@ -1,3 +1,4 @@
+from functools import lru_cache
 from pprint import pprint
 from dataclasses import dataclass, field
 
@@ -27,8 +28,8 @@ class Screenplay:
                                                       'REVERSE ANGLE',  'SPLIT SCREEN SHOT:', 'STOCK SHOT:',
                                                       'TIGHT ON', 'TIME CUT', 'V.O.', 'ZOOM:'])
 
-    def __post_init__(self):
-        self.text = text
+    # def __post_init__(self):
+    #     self.text = text
 
     @classmethod
     def add_transition(cls, transition):
@@ -128,11 +129,3 @@ class Screenplay:
                 }})
 
         return result
-
-
-if __name__ == '__main__':
-    with open('text.txt', 'r') as f:
-        text = f.readlines()
-
-    sc = Screenplay(text)
-    pprint(sc.load())
