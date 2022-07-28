@@ -10,7 +10,7 @@ venv
 notes.md
 eda.ipynb
 # Byte-compiled / optimized / DLL files
-__pycache__/
+__pycache_
 *.py[cod]
 *$py.class
 # C extensions
