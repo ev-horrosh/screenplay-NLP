@@ -15,7 +15,7 @@ class Screenplay:
     TOD: list[str] = field(default_factory=lambda: ['AFTERNOON', 'CONTINUOUS', 'DAWN', 'DAY', 'DUSK',
                                                     'EVENING', 'LATER', 'MORNING', 'NIGHT', 'NOON', 'SAME', 'SUNSET'])
 
-    TRANSITIONS: list[str] = field(default_factory=lambda: ['BACK TO:', 'CUT TO:', 'DISSOLVE TO:', 'FADE IN:', 'CUT BACK TO:', 'CUT BACK TO:',
+    TRANSITIONS: list[str] = field(init=True, default_factory=lambda: ['BACK TO:', 'CUT TO:', 'DISSOLVE TO:', 'FADE IN:', 'CUT BACK TO:', 'CUT BACK TO:',
                                                             'FADE OUT:', 'FADE TO:', 'JUMP CUT TO:', 'MATCH CUT TO:', 'TITLE:', 'QUICK CUTS:',
                                                             'SMASH CUT TO:', 'TIME CUT:', 'WIPE TO:', 'CROSSFADE:', 'OVER BLACK:', 'CUT TO BLACK',
                                                             'FADE TO:BLACK', 'FLASH CUT:', 'LAP DISSOLVE:', 'MATCH DISSOLVE TO:', 'SUPER:', 'IRIS OUT:'])
@@ -32,12 +32,18 @@ class Screenplay:
     #     self.text = text
 
     @classmethod
-    def add_transition(cls, transition):
-        cls.TRANSITIONS.append(transition)
+    def read_txt(cls,file):
+        with open (file,'r') as f:
+            text=f.readlines()
+            return cls(text[:400])
+    
+   
+    def add_transition(self, transition):
+        self.TRANSITIONS.append(transition)
 
-    @classmethod
-    def add_shot(cls, shot):
-        cls.SHOTS.append(shot)
+    
+    def add_shot(self, shot):
+        self.SHOTS.append(shot)
 
     def locations(self) -> list[str]:
         locations = []
