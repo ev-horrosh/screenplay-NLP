@@ -2,12 +2,13 @@ Screenplay Parser is a rule-based parser to parse the data from screenplays for 
 How to use it:
 
 ```python
-script=Screenplay.read_txt('file.txt')
+screenplay=Screenplay.read_txt('file.txt')
+script=screenplay.load()
 ```
 
 Accessing the dictionary. 
 
-#### Pages of a Script.
+#### Scenes.
 Start with `1`.
 ```python
 script[1]
