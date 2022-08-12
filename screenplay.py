@@ -1,5 +1,3 @@
-from functools import lru_cache
-from pprint import pprint
 from dataclasses import dataclass, field
 
 
@@ -35,11 +33,12 @@ class Screenplay:
     def read_txt(cls,file):
         with open (file,'r') as f:
             text=f.readlines()
-            return cls(text[:400])
-    
-   
-    def add_transition(self, transition):
-        self.TRANSITIONS.append(transition)
+            return cls(text)
+
+    @classmethod
+    def add_transition(cls, transition):
+        cls.TRANSITIONS.append(transition)
+        return cls(transition)
 
     
     def add_shot(self, shot):
